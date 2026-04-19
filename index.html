@@ -1,222 +1,1395 @@
-<!DOCTYPE html> <html lang="lb"> <head> <meta charset="utf-8"/> <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/> <title>P3 – Verben</title> <script async src="https://www.googletagmanager.com/gtag/js?id=G-P672MJ10YJ"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){ dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-P672MJ10YJ'); </script> <style> @font-face{ font-family:'Schoulschrëft'; src:url('https://raw.githubusercontent.com/albrechtclaire1007/schoulschreft/main/schoulschreft_bold%5B2%5D.TTF') format('truetype'); font-weight:bold; font-style:normal; font-display:swap; } :root{ --bg1:#E7F5FF; --bg2:#CFEAFF; --bar:#6FAFE6; --barBorder:#4D90CD; --ink:#1f1f1f; --white:#fff; --border:3px; --shadow:0 10px 24px rgba(0,0,0,.08); --pad:clamp(10px,2.2vw,16px); --r:18px; --ok:#DDF6E2; --bad:#FFDDE1; --softBlue:#EAF6FF; --softPurple:#F4ECFF; --softLine:#B9D8F0; --softPurpleLine:#D5C3F2; --gold:#FFE9A8; --iconArrow:"https://i.postimg.cc/QBYTSN08/p3arrow.png"; --iconPlay:"https://i.postimg.cc/ZB9yQkMt/p3play.png"; --iconReplay:"https://i.postimg.cc/ft30P4rQ/p3replay.png"; } *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; outline:none; } html,body{ height:100%; margin:0; background:linear-gradient(135deg,var(--bg2),var(--bg1)); color:var(--ink); font-family:'Schoulschrëft', Arial, sans-serif; } button, select{ font-family:'Schoulschrëft', Arial, sans-serif; } .hidden{display:none!important;} .topBar{ position:sticky; top:10px; z-index:10; width:min(1200px,96vw); margin:10px auto 0; background:var(--bar); border:var(--border) solid var(--barBorder); border-radius:999px; box-shadow:var(--shadow); padding:10px 12px; display:grid; grid-template-columns:70px 1fr 70px; align-items:center; gap:10px; } .barBtn{ border:none; background:transparent; cursor:pointer; display:grid; place-items:center; width:54px; height:54px; margin:0 auto; } .barBtn:active{transform:scale(.98);} .barBtn img{ width:46px; height:46px; object-fit:contain; } .barBtn.back img{transform:rotate(180deg);} .barTitle{ text-align:center; color:#fff; font-size:clamp(1.5rem,3.2vw,2.4rem); margin:0; line-height:1.1; padding:0 6px; } .wrap{ width:min(1200px,96vw); margin:18px auto 26px; padding:var(--pad); display:flex; flex-direction:column; gap:14px; } .card{ background:rgba(255,255,255,.82); border:var(--border) solid rgba(255,255,255,.68); border-radius:var(--r); box-shadow:var(--shadow); padding:clamp(12px,2.2vw,18px); } .game{ display:none; } .game.active{ display:block; } .cardTitle{ margin:0 0 8px 0; font-size:clamp(1.15rem,2.2vw,1.55rem); opacity:.95; text-align:center; } .subTitle{ text-align:center; font-size:clamp(1rem,1.8vw,1.2rem); opacity:.8; margin:0 0 12px 0; } .topRow{ display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px; } .pill{ background:var(--white); border:3px solid var(--softLine); border-radius:999px; padding:8px 14px; font-size:clamp(.95rem,1.8vw,1.15rem); box-shadow:0 4px 10px rgba(0,0,0,.04); } .ctrlBtn{ border:none; border-radius:999px; background:var(--white); padding:8px 14px; min-height:50px; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 6px 14px rgba(0,0,0,.06); border:3px solid var(--softLine); cursor:pointer; font-size:1.05rem; } .ctrlBtn img{ width:30px; height:30px; } .ctrlBtn:active{transform:scale(.98);} .ctrlBtn.secondary{ border-color:var(--softPurpleLine); background:var(--softPurple); } .ctrlBtn.primary{ background:var(--softBlue); } .ctrlBtn[disabled]{ opacity:.45; cursor:default; } .promptBox{ background:linear-gradient(180deg,#ffffff,#F8FDFF); border:3px solid var(--softLine); border-radius:20px; padding:18px; min-height:110px; display:flex; align-items:center; justify-content:center; text-align:center; box-shadow:0 8px 18px rgba(0,0,0,.04); margin-bottom:14px; } .promptBig{ font-size:clamp(1.8rem,4.4vw,3.2rem); line-height:1.12; } .feedback{ min-height:1.4em; font-size:clamp(1rem,2vw,1.3rem); text-align:center; margin-top:10px; } .feedback.ok{color:#118642;} .feedback.bad{color:#CC3355;} .flashGreen{animation:flashGreen .28s ease;} .flashRed{animation:flashRed .28s ease;} @keyframes flashGreen{ 0%{box-shadow:none;} 50%{box-shadow:0 0 0 8px rgba(133,220,146,.5);} 100%{box-shadow:none;} } @keyframes flashRed{ 0%{box-shadow:none;} 50%{box-shadow:0 0 0 8px rgba(255,120,140,.38);} 100%{box-shadow:none;} } .letterGrid{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:4px; } .letterBtn{ width:62px; height:62px; border-radius:16px; border:3px solid var(--softPurpleLine); background:var(--white); font-size:1.8rem; box-shadow:0 5px 10px rgba(0,0,0,.04); cursor:pointer; } .letterBtn.selected{ background:var(--gold); border-color:#E1B83A; } .letterBtn.locked{ pointer-events:none; } .buildRows{ display:flex; flex-direction:column; gap:12px; } .pickRow{ background:rgba(255,255,255,.75); border:3px solid var(--softLine); border-radius:18px; padding:12px; } .pickTitle{ text-align:center; font-size:1.05rem; opacity:.85; margin-bottom:10px; } .tileWrap{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; } .tile{ border:none; background:var(--white); border:3px solid var(--softPurpleLine); border-radius:16px; padding:12px 16px; font-size:1.35rem; min-width:92px; box-shadow:0 5px 10px rgba(0,0,0,.04); } .tile.selected{ background:var(--gold); border-color:#E1B83A; } .resultBox{ margin-top:12px; background:#fff; border:3px solid var(--softLine); border-radius:18px; padding:14px; min-height:74px; display:flex; align-items:center; justify-content:center; text-align:center; font-size:clamp(1.45rem,3vw,2.2rem); } .choiceGrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; } .choiceBtn{ border:none; background:var(--white); border:3px solid var(--softPurpleLine); border-radius:18px; padding:14px 12px; min-height:78px; font-size:1.35rem; box-shadow:0 5px 10px rgba(0,0,0,.04); text-align:center; } .choiceBtn:active{transform:scale(.98);} .mcGrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:10px; } .sayBox{ display:flex; flex-direction:column; gap:12px; } .tableWrap{ overflow:auto; } table{ width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:18px; background:#fff; border:3px solid var(--softLine); } th,td{ border-right:2px solid var(--softLine); border-bottom:2px solid var(--softLine); padding:12px 10px; text-align:center; font-size:1.2rem; } th:last-child, td:last-child{border-right:none;} tr:last-child td{border-bottom:none;} thead th{ background:var(--softBlue); } .rowHead{ background:#F7FCFF; min-width:120px; } .tableSelect{ width:100%; min-width:160px; max-width:250px; border-radius:12px; border:3px solid var(--softPurpleLine); background:#fff; padding:10px 12px; font-size:1.05rem; } .smallNote{ text-align:center; font-size:1rem; opacity:.75; margin-top:4px; } @media (max-width:700px){ .topBar{ grid-template-columns:62px 1fr 62px; padding:8px 8px; } .barBtn{ width:46px; height:46px; } .barBtn img{ width:40px; height:40px; } .letterBtn{ width:54px; height:54px; font-size:1.5rem; } .choiceBtn, .tile{ font-size:1.15rem; } th,td{ font-size:1.05rem; padding:10px 8px; } } </style> </head> <body> <div class="topBar"> <button class="barBtn back" id="prev" aria-label="Virdrun"> <img src="https://i.postimg.cc/QBYTSN08/p3arrow.png" alt=""> </button> <h1 class="barTitle" id="gameTitle">P3 – Verben</h1> <button class="barBtn" id="next" aria-label="Nächst"> <img src="https://i.postimg.cc/QBYTSN08/p3arrow.png" alt=""> </button> </div> <div class="wrap"> <section class="game active" id="game1"> <div class="card"> <p class="cardTitle">1. Fann de Stamm</p> <p class="subTitle">Klick op all d’Buschstawen, déi zum Stamm gehéieren.</p>
-  <div class="topRow">
-    <button class="ctrlBtn secondary" id="g1Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <button class="ctrlBtn primary" id="g1Check">Kontrolléieren</button>
-    <div class="pill" id="g1Prog">1 / 6</div>
-  </div>
+<!DOCTYPE html>
+<html lang="lb">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>P3 – Verben</title>
 
-  <div class="promptBox" id="g1Box">
-    <div class="promptBig" id="g1Word">schnadderen</div>
-  </div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P672MJ10YJ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'G-P672MJ10YJ');
+</script>
 
-  <div class="letterGrid" id="g1Letters"></div>
-  <div class="feedback" id="g1Fb"></div>
+<style>
+@font-face{
+  font-family:'Schoulschrëft';
+  src:url('https://raw.githubusercontent.com/albrechtclaire1007/schoulschreft/main/schoulschreft_bold%5B2%5D.TTF') format('truetype');
+  font-weight:bold;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root{
+  --bg1:#E7F5FF;
+  --bg2:#CFEAFF;
+
+  --bar:#6FAFE6;
+  --barBorder:#4D90CD;
+
+  --ink:#1f1f1f;
+  --white:#fff;
+  --border:3px;
+  --shadow:0 10px 24px rgba(0,0,0,.08);
+  --pad:clamp(10px,2.2vw,16px);
+  --r:18px;
+
+  --lineBlue:#B7D9F4;
+  --linePurple:#D8C4F0;
+  --softBlue:#F3FBFF;
+  --softPurple:#F7F0FF;
+
+  --ok:#DDF6E2;
+  --bad:#FFE0E6;
+
+  --gold:#FFE8A6;
+  --goldLine:#E2BA43;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  outline:none;
+}
+
+html,
+body{
+  height:100%;
+  margin:0;
+  background:linear-gradient(135deg,var(--bg2),var(--bg1));
+  color:var(--ink);
+  font-family:'Schoulschrëft', Arial, sans-serif;
+}
+
+button,
+select{
+  font-family:'Schoulschrëft', Arial, sans-serif;
+}
+
+.hidden{
+  display:none !important;
+}
+
+/* ===== TOP BAR ===== */
+.topBar{
+  position:sticky;
+  top:10px;
+  z-index:10;
+  width:min(1200px,96vw);
+  margin:10px auto 0;
+  background:var(--bar);
+  border:var(--border) solid var(--barBorder);
+  border-radius:999px;
+  box-shadow:var(--shadow);
+  padding:10px 12px;
+  display:grid;
+  grid-template-columns:70px 1fr 70px;
+  align-items:center;
+  gap:10px;
+}
+
+.barBtn{
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  width:54px;
+  height:54px;
+  margin:0 auto;
+}
+
+.barBtn:active{
+  transform:scale(.98);
+}
+
+.barBtn img{
+  width:46px;
+  height:46px;
+  object-fit:contain;
+}
+
+.barBtn.back img{
+  transform:rotate(180deg);
+}
+
+.barTitle{
+  text-align:center;
+  color:#fff;
+  font-size:clamp(1.45rem,3.2vw,2.3rem);
+  margin:0;
+  line-height:1.1;
+  padding:0 6px;
+}
+
+/* ===== CONTENT ===== */
+.wrap{
+  width:min(1200px,96vw);
+  margin:18px auto 26px;
+  padding:var(--pad);
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.card{
+  background:rgba(255,255,255,.82);
+  border:var(--border) solid rgba(255,255,255,.65);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  padding:clamp(12px,2.2vw,18px);
+}
+
+.game{
+  display:none;
+}
+
+.game.active{
+  display:block;
+}
+
+.cardTitle{
+  margin:0 0 8px 0;
+  font-size:clamp(1.15rem,2.2vw,1.55rem);
+  opacity:.95;
+  text-align:center;
+}
+
+.subTitle{
+  text-align:center;
+  font-size:clamp(1rem,1.8vw,1.18rem);
+  opacity:.82;
+  margin:0 0 12px 0;
+}
+
+.topRow{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.pill{
+  background:var(--white);
+  border:3px solid var(--lineBlue);
+  border-radius:999px;
+  padding:8px 14px;
+  font-size:clamp(.95rem,1.8vw,1.12rem);
+  box-shadow:0 4px 10px rgba(0,0,0,.04);
+}
+
+.ctrlBtn{
+  border:none;
+  border-radius:999px;
+  background:var(--white);
+  padding:8px 14px;
+  min-height:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  box-shadow:0 6px 14px rgba(0,0,0,.06);
+  border:3px solid var(--lineBlue);
+  cursor:pointer;
+  font-size:1.02rem;
+}
+
+.ctrlBtn img{
+  width:30px;
+  height:30px;
+}
+
+.ctrlBtn:active{
+  transform:scale(.98);
+}
+
+.ctrlBtn.secondary{
+  border-color:var(--linePurple);
+  background:var(--softPurple);
+}
+
+.ctrlBtn.primary{
+  background:var(--softBlue);
+}
+
+.ctrlBtn[disabled]{
+  opacity:.45;
+  cursor:default;
+}
+
+.promptBox{
+  background:linear-gradient(180deg,#ffffff,#F8FDFF);
+  border:3px solid var(--lineBlue);
+  border-radius:20px;
+  padding:18px;
+  min-height:112px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  box-shadow:0 8px 18px rgba(0,0,0,.04);
+  margin-bottom:14px;
+}
+
+.promptBig{
+  font-size:clamp(1.8rem,4.4vw,3.2rem);
+  line-height:1.12;
+}
+
+.feedback{
+  min-height:1.4em;
+  font-size:clamp(1rem,2vw,1.28rem);
+  text-align:center;
+  margin-top:10px;
+}
+
+.feedback.ok{
+  color:#128246;
+}
+
+.feedback.bad{
+  color:#C63157;
+}
+
+.flashGreen{
+  animation:flashGreen .28s ease;
+}
+
+.flashRed{
+  animation:flashRed .28s ease;
+}
+
+@keyframes flashGreen{
+  0%{ box-shadow:none; }
+  50%{ box-shadow:0 0 0 8px rgba(88,199,108,.35); }
+  100%{ box-shadow:none; }
+}
+
+@keyframes flashRed{
+  0%{ box-shadow:none; }
+  50%{ box-shadow:0 0 0 8px rgba(255,80,120,.26); }
+  100%{ box-shadow:none; }
+}
+
+/* ===== GAME 1 ===== */
+.letterGrid{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+}
+
+.letterBtn{
+  width:62px;
+  height:62px;
+  border-radius:16px;
+  border:3px solid var(--linePurple);
+  background:var(--white);
+  font-size:1.8rem;
+  box-shadow:0 5px 10px rgba(0,0,0,.04);
+  cursor:pointer;
+}
+
+.letterBtn.selected{
+  background:var(--gold);
+  border-color:var(--goldLine);
+}
+
+/* ===== GAME 2 ===== */
+.buildRows{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.pickRow{
+  background:rgba(255,255,255,.78);
+  border:3px solid var(--lineBlue);
+  border-radius:18px;
+  padding:12px;
+}
+
+.pickTitle{
+  text-align:center;
+  font-size:1.05rem;
+  opacity:.85;
+  margin-bottom:10px;
+}
+
+.tileWrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+}
+
+.tile{
+  border:none;
+  background:var(--white);
+  border:3px solid var(--linePurple);
+  border-radius:16px;
+  padding:12px 16px;
+  font-size:1.35rem;
+  min-width:94px;
+  box-shadow:0 5px 10px rgba(0,0,0,.04);
+  cursor:pointer;
+}
+
+.tile.selected{
+  background:var(--gold);
+  border-color:var(--goldLine);
+}
+
+.resultBox{
+  margin-top:12px;
+  background:#fff;
+  border:3px solid var(--lineBlue);
+  border-radius:18px;
+  padding:14px;
+  min-height:74px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:clamp(1.45rem,3vw,2.2rem);
+}
+
+/* ===== CHOICE BUTTONS ===== */
+.choiceGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:10px;
+}
+
+.choiceBtn{
+  border:none;
+  background:var(--white);
+  border:3px solid var(--linePurple);
+  border-radius:18px;
+  padding:14px 12px;
+  min-height:78px;
+  font-size:1.35rem;
+  box-shadow:0 5px 10px rgba(0,0,0,.04);
+  text-align:center;
+  cursor:pointer;
+}
+
+.choiceBtn:active{
+  transform:scale(.98);
+}
+
+/* ===== GAME 5 ===== */
+.answerBox{
+  margin-top:12px;
+  background:#fff;
+  border:3px solid var(--lineBlue);
+  border-radius:18px;
+  padding:16px;
+  min-height:86px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:clamp(1.5rem,3vw,2.25rem);
+}
+
+/* ===== GAME 6 ===== */
+.tableWrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border-radius:18px;
+  background:#fff;
+  border:3px solid var(--lineBlue);
+}
+
+th,
+td{
+  border-right:2px solid var(--lineBlue);
+  border-bottom:2px solid var(--lineBlue);
+  padding:12px 10px;
+  text-align:center;
+  font-size:1.18rem;
+}
+
+th:last-child,
+td:last-child{
+  border-right:none;
+}
+
+tr:last-child td{
+  border-bottom:none;
+}
+
+thead th{
+  background:var(--softBlue);
+}
+
+.rowHead{
+  background:#F7FCFF;
+  min-width:120px;
+}
+
+.tableSelect{
+  width:100%;
+  min-width:160px;
+  max-width:250px;
+  border-radius:12px;
+  border:3px solid var(--linePurple);
+  background:#fff;
+  padding:10px 12px;
+  font-size:1.05rem;
+}
+
+.smallNote{
+  text-align:center;
+  font-size:1rem;
+  opacity:.75;
+  margin-top:4px;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.18);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:30;
+}
+
+.overlay.show{
+  display:flex;
+}
+
+.modal{
+  width:min(460px,92vw);
+  background:#fff;
+  border:3px solid var(--lineBlue);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  padding:20px;
+  text-align:center;
+}
+
+.modal h3{
+  margin:0 0 10px 0;
+  font-size:1.6rem;
+}
+
+.modal p{
+  margin:0 0 14px 0;
+  font-size:1.15rem;
+}
+
+@media (max-width:700px){
+  .topBar{
+    grid-template-columns:62px 1fr 62px;
+    padding:8px;
+  }
+
+  .barBtn{
+    width:46px;
+    height:46px;
+  }
+
+  .barBtn img{
+    width:40px;
+    height:40px;
+  }
+
+  .letterBtn{
+    width:54px;
+    height:54px;
+    font-size:1.5rem;
+  }
+
+  .choiceBtn,
+  .tile{
+    font-size:1.15rem;
+  }
+
+  th,
+  td{
+    font-size:1.05rem;
+    padding:10px 8px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="topBar">
+  <button class="barBtn back" id="prev" aria-label="Virdrun">
+    <img src="https://i.postimg.cc/QBYTSN08/p3arrow.png" alt="">
+  </button>
+
+  <h1 class="barTitle" id="gameTitle">P3 – Verben</h1>
+
+  <button class="barBtn" id="next" aria-label="Nächst">
+    <img src="https://i.postimg.cc/QBYTSN08/p3arrow.png" alt="">
+  </button>
 </div>
-</section> <section class="game" id="game2"> <div class="card"> <p class="cardTitle">2. Bauen: Stamm + Endung</p> <p class="subTitle">Wiel de richtege Stamm an déi richteg Endung.</p>
-  <div class="topRow">
-    <button class="ctrlBtn secondary" id="g2Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <button class="ctrlBtn primary" id="g2Check">Kontrolléieren</button>
-    <div class="pill" id="g2Prog">1 / 18</div>
-  </div>
 
-  <div class="promptBox">
-    <div class="promptBig" id="g2Prompt">du – billen</div>
-  </div>
+<div class="wrap">
 
-  <div class="buildRows">
-    <div class="pickRow">
-      <div class="pickTitle">Stamm</div>
-      <div class="tileWrap" id="g2Stems"></div>
+  <section class="game active" id="game1">
+    <div class="card">
+      <p class="cardTitle">1. Fann de Stamm</p>
+      <p class="subTitle">Klick op all d’Buschstawen, déi zum Stamm gehéieren.</p>
+
+      <div class="topRow">
+        <button class="ctrlBtn secondary" id="g1Replay">
+          <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
+          <span>Nei</span>
+        </button>
+        <button class="ctrlBtn primary" id="g1Check">Kontrolléieren</button>
+        <div class="pill" id="g1Prog">1 / 6</div>
+      </div>
+
+      <div class="promptBox" id="g1Box">
+        <div class="promptBig" id="g1Word">schnadderen</div>
+      </div>
+
+      <div class="letterGrid" id="g1Letters"></div>
+      <div class="feedback" id="g1Fb"></div>
     </div>
-    <div class="pickRow">
-      <div class="pickTitle">Endung</div>
-      <div class="tileWrap" id="g2Ends"></div>
+  </section>
+
+  <section class="game" id="game2">
+    <div class="card">
+      <p class="cardTitle">2. Bauen: Stamm + Endung</p>
+      <p class="subTitle">Wiel de richtege Stamm an déi richteg Endung.</p>
+
+      <div class="topRow">
+        <button class="ctrlBtn secondary" id="g2Replay">
+          <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
+          <span>Nei</span>
+        </button>
+        <button class="ctrlBtn primary" id="g2Check">Kontrolléieren</button>
+        <div class="pill" id="g2Prog">1 / 18</div>
+      </div>
+
+      <div class="promptBox">
+        <div class="promptBig" id="g2Prompt">du – billen</div>
+      </div>
+
+      <div class="buildRows">
+        <div class="pickRow">
+          <div class="pickTitle">Stamm</div>
+          <div class="tileWrap" id="g2Stems"></div>
+        </div>
+
+        <div class="pickRow">
+          <div class="pickTitle">Endung</div>
+          <div class="tileWrap" id="g2Ends"></div>
+        </div>
+      </div>
+
+      <div class="resultBox" id="g2Result">—</div>
+      <div class="feedback" id="g2Fb"></div>
     </div>
-  </div>
+  </section>
 
-  <div class="resultBox" id="g2Result">—</div>
-  <div class="feedback" id="g2Fb"></div>
-</div>
-  <div class="topRow">
-    <button class="ctrlBtn secondary" id="g2Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <button class="ctrlBtn primary" id="g2Check">Kontrolléieren</button>
-    <div class="pill" id="g2Prog">1 / 18</div>
-  </div>
+  <section class="game" id="game3">
+    <div class="card">
+      <p class="cardTitle">3. Lauschter a wiel de richtege Pronomen</p>
+      <p class="subTitle">Lauschter op d’Form a wiels dat richtegt Pronomen.</p>
 
-  <div class="promptBox">
-    <div class="promptBig" id="g2Prompt">du – billen</div>
-  </div>
+      <div class="topRow">
+        <button class="ctrlBtn primary" id="g3Play">
+          <img src="https://i.postimg.cc/ZB9yQkMt/p3play.png" alt="">
+          <span>Play</span>
+        </button>
+        <button class="ctrlBtn secondary" id="g3Replay">
+          <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
+          <span>Nei</span>
+        </button>
+        <div class="pill" id="g3Prog">1 / 18</div>
+      </div>
 
-  <div class="buildRows">
-    <div class="pickRow">
-      <div class="pickTitle">Stamm</div>
-      <div class="tileWrap" id="g2Stems"></div>
+      <div class="promptBox" id="g3Box">
+        <div class="promptBig">🎧</div>
+      </div>
+
+      <div class="choiceGrid" id="g3Choices"></div>
+      <div class="feedback" id="g3Fb"></div>
+      <div class="smallNote">Klick op Play fir d’Audio ze lauschteren.</div>
     </div>
-    <div class="pickRow">
-      <div class="pickTitle">Endung</div>
-      <div class="tileWrap" id="g2Ends"></div>
+  </section>
+
+  <section class="game" id="game4">
+    <div class="card">
+      <p class="cardTitle">4. Wiel déi richteg Form</p>
+      <p class="subTitle">Wiel déi richteg konjugéiert Form.</p>
+
+      <div class="topRow">
+        <button class="ctrlBtn secondary" id="g4Replay">
+          <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
+          <span>Nei</span>
+        </button>
+        <div class="pill" id="g4Prog">1 / 18</div>
+      </div>
+
+      <div class="promptBox" id="g4Box">
+        <div class="promptBig" id="g4Prompt">du – billen</div>
+      </div>
+
+      <div class="choiceGrid" id="g4Choices"></div>
+      <div class="feedback" id="g4Fb"></div>
     </div>
-  </div>
+  </section>
 
-  <div class="resultBox" id="g2Result">—</div>
-  <div class="feedback" id="g2Fb"></div>
-</div>
-  <div class="topRow">
-    <button class="ctrlBtn primary" id="g3Play">
-      <img src="https://i.postimg.cc/ZB9yQkMt/p3play.png" alt="">
-      <span>Play</span>
-    </button>
-    <button class="ctrlBtn secondary" id="g3Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <div class="pill" id="g3Prog">1 / 18</div>
-  </div>
+  <section class="game" id="game5">
+    <div class="card">
+      <p class="cardTitle">5. Kuck a so</p>
+      <p class="subTitle">Kuck d’Form a so se haart. Mat Play kanns du d’Léisung lauschteren.</p>
 
-  <div class="promptBox" id="g3Box">
-    <div class="promptBig">🎧</div>
-  </div>
+      <div class="topRow">
+        <button class="ctrlBtn primary" id="g5Play">
+          <img src="https://i.postimg.cc/ZB9yQkMt/p3play.png" alt="">
+          <span>Play</span>
+        </button>
+        <button class="ctrlBtn secondary" id="g5Replay">
+          <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
+          <span>Nei mixen</span>
+        </button>
+        <button class="ctrlBtn primary" id="g5Show">Äntwert weisen</button>
+        <div class="pill" id="g5Prog">1 / 18</div>
+      </div>
 
-  <div class="choiceGrid" id="g3Choices"></div>
-  <div class="feedback" id="g3Fb"></div>
-  <div class="smallNote">Klick op Play fir d’Audio ze lauschteren.</div>
-</div>
-    <div class="topRow">
-    <button class="ctrlBtn primary" id="g3Play">
-      <img src="https://i.postimg.cc/ZB9yQkMt/p3play.png" alt="">
-      <span>Play</span>
-    </button>
-    <button class="ctrlBtn secondary" id="g3Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <div class="pill" id="g3Prog">1 / 18</div>
-  </div>
+      <div class="promptBox">
+        <div class="promptBig" id="g5Prompt">du – billen</div>
+      </div>
 
-  <div class="promptBox" id="g3Box">
-    <div class="promptBig">🎧</div>
-  </div>
-
-  <div class="choiceGrid" id="g3Choices"></div>
-  <div class="feedback" id="g3Fb"></div>
-  <div class="smallNote">Klick op Play fir d’Audio ze lauschteren.</div>
-</div>
-    <div class="topRow">
-    <button class="ctrlBtn secondary" id="g4Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <div class="pill" id="g4Prog">1 / 18</div>
-  </div>
-
-  <div class="promptBox" id="g4Box">
-    <div class="promptBig" id="g4Prompt">du – billen</div>
-  </div>
-
-  <div class="mcGrid" id="g4Choices"></div>
-  <div class="feedback" id="g4Fb"></div>
-</div>
-    <div class="topRow">
-    <button class="ctrlBtn secondary" id="g4Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <div class="pill" id="g4Prog">1 / 18</div>
-  </div>
-
-  <div class="promptBox" id="g4Box">
-    <div class="promptBig" id="g4Prompt">du – billen</div>
-  </div>
-
-  <div class="mcGrid" id="g4Choices"></div>
-  <div class="feedback" id="g4Fb"></div>
-</div>
-    <div class="topRow">
-    <button class="ctrlBtn secondary" id="g5Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei mixen</span>
-    </button>
-    <button class="ctrlBtn primary" id="g5Show">Äntwert weisen</button>
-    <div class="pill" id="g5Prog">1 / 18</div>
-  </div>
-
-  <div class="sayBox">
-    <div class="promptBox">
-      <div class="promptBig" id="g5Prompt">du – billen</div>
+      <div class="answerBox" id="g5Answer">—</div>
     </div>
-    <div class="resultBox" id="g5Answer">—</div>
-  </div>
-</div>
-    <div class="topRow">
-    <button class="ctrlBtn secondary" id="g5Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei mixen</span>
-    </button>
-    <button class="ctrlBtn primary" id="g5Show">Äntwert weisen</button>
-    <div class="pill" id="g5Prog">1 / 18</div>
-  </div>
+  </section>
 
-  <div class="sayBox">
-    <div class="promptBox">
-      <div class="promptBig" id="g5Prompt">du – billen</div>
+  <section class="game" id="game6">
+    <div class="card">
+      <p class="cardTitle">6. Fëll d'Tabell aus</p>
+      <p class="subTitle">Wiel fir all Persoun déi richteg Form.</p>
+
+      <div class="topRow">
+        <button class="ctrlBtn secondary" id="g6Replay">
+          <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
+          <span>Nei</span>
+        </button>
+        <button class="ctrlBtn primary" id="g6Check">Kontrolléieren</button>
+        <div class="pill" id="g6VerbPill">billen</div>
+        <div class="pill" id="g6Prog">1 / 6</div>
+      </div>
+
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Persoun</th>
+              <th>Form</th>
+            </tr>
+          </thead>
+          <tbody id="g6Body"></tbody>
+        </table>
+      </div>
+
+      <div class="feedback" id="g6Fb"></div>
     </div>
-    <div class="resultBox" id="g5Answer">—</div>
+  </section>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3>Bravo!</h3>
+    <p id="overlayText">Du bass fäerdeg.</p>
+    <button class="ctrlBtn primary" id="overlayBtn" style="margin:0 auto;">Weider</button>
   </div>
 </div>
-    <div class="topRow">
-    <button class="ctrlBtn secondary" id="g6Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <button class="ctrlBtn primary" id="g6Check">Kontrolléieren</button>
-    <div class="pill" id="g6VerbPill">billen</div>
-    <div class="pill" id="g6Prog">1 / 6</div>
-  </div>
 
-  <div class="tableWrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Persoun</th>
-          <th>Form</th>
-        </tr>
-      </thead>
-      <tbody id="g6Body"></tbody>
-    </table>
-  </div>
+<script>
+/* ===================== DATA ===================== */
+const AUDIO_BASE = "https://github.com/albrechtclaire1007/p3verben1/raw/refs/heads/main/";
 
-  <div class="feedback" id="g6Fb"></div>
-</div>
-    <div class="topRow">
-    <button class="ctrlBtn secondary" id="g6Replay">
-      <img src="https://i.postimg.cc/ft30P4rQ/p3replay.png" alt="">
-      <span>Nei</span>
-    </button>
-    <button class="ctrlBtn primary" id="g6Check">Kontrolléieren</button>
-    <div class="pill" id="g6VerbPill">billen</div>
-    <div class="pill" id="g6Prog">1 / 6</div>
-  </div>
+const PERSONS = [
+  { key:"ech", label:"ech" },
+  { key:"du",  label:"du" },
+  { key:"hhs", label:"hien/hatt/si" }
+];
 
-  <div class="tableWrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Persoun</th>
-          <th>Form</th>
-        </tr>
-      </thead>
-      <tbody id="g6Body"></tbody>
-    </table>
-  </div>
+const VERBS = [
+  {
+    inf:"schnadderen",
+    stem:"schnadder",
+    forms:{
+      ech:"schnadderen",
+      du:"schnadders",
+      hhs:"schnaddert"
+    },
+    audio:{
+      ech:["schnadderen.mp3","ech_schnadderen.mp3"],
+      du:["schnadders.mp3","du_schnadders.mp3"],
+      hhs:["schnaddert.mp3","hien_hatt_si_schnaddert.mp3"]
+    }
+  },
+  {
+    inf:"billen",
+    stem:"bill",
+    forms:{
+      ech:"billen",
+      du:"bills",
+      hhs:"billt"
+    },
+    audio:{
+      ech:["ech_billen.mp3","billen.mp3","infinitif_billen.mp3"],
+      du:["bills.mp3","du_bills.mp3"],
+      hhs:["billt.mp3","hien_hatt_si_billt.mp3"]
+    }
+  },
+  {
+    inf:"grunzen",
+    stem:"grunz",
+    forms:{
+      ech:"grunzen",
+      du:"grunz",
+      hhs:"grunzt"
+    },
+    audio:{
+      ech:["grunzen.mp3","ech_grunzen.mp3"],
+      du:["grunz.mp3","du_grunz.mp3"],
+      hhs:["grunzt.mp3","hien_hatt_si_grunzt.mp3"]
+    }
+  },
+  {
+    inf:"piipsen",
+    stem:"piips",
+    forms:{
+      ech:"piipsen",
+      du:"piips",
+      hhs:"piipst"
+    },
+    audio:{
+      ech:["piipsen.mp3","ech_piipsen.mp3"],
+      du:["piips.mp3","du_piips.mp3"],
+      hhs:["piipst.mp3","hien_hatt_si_piipst.mp3"]
+    }
+  },
+  {
+    inf:"miauen",
+    stem:"miau",
+    forms:{
+      ech:"miauen",
+      du:"miaus",
+      hhs:"miaut"
+    },
+    audio:{
+      ech:["miauen.mp3","ech_miauen.mp3"],
+      du:["miaus.mp3","du_miaus.mp3"],
+      hhs:["miaut.mp3","hien_hatt_si_miaut.mp3"]
+    }
+  },
+  {
+    inf:"jaitzen",
+    stem:"jaitz",
+    forms:{
+      ech:"jaitzen",
+      du:"jaitz",
+      hhs:"jaitzt"
+    },
+    audio:{
+      ech:["jaitzen.mp3","ech_jaitzen.mp3","jaitzen.mp3"],
+      du:["jaitz.mp3","du_jaitz.mp3","jaitzt.mp3"],
+      hhs:["jaitzt.mp3","hien_hatt_si_jaitzt.mp3"]
+    }
+  }
+];
 
-  <div class="feedback" id="g6Fb"></div>
-</div></section> </div> <script> const AUDIO_BASE = "https://github.com/albrechtclaire1007/p3verben1/raw/refs/heads/main/"; const PERSONS = [ { key:"ech", label:"ech" }, { key:"du", label:"du" }, { key:"hhs", label:"hien/hatt/si" } ]; const VERBS = [ { inf:"schnadderen", stem:"schnadder", forms:{ ech:"schnadderen", du:"schnadders", hhs:"schnaddert" }, audio:{ ech:"schnadderen.mp3", du:"schnadders.mp3", hhs:"schnaddert.mp3" } }, { inf:"billen", stem:"bill", forms:{ ech:"billen", du:"bills", hhs:"billt" }, audio:{ ech:"billen.mp3", du:"bills.mp3", hhs:"billt.mp3" } }, { inf:"grunzen", stem:"grunz", forms:{ ech:"grunzen", du:"grunz.mp3", hhs:"grunzt.mp3" }, audio:{ ech:"grunzen.mp3", du:"grunz.mp3", hhs:"grunzt.mp3" } }, { inf:"piipsen", stem:"piips", forms:{ ech:"piipsen", du:"piips", hhs:"piipst" }, audio:{ ech:"piipsen.mp3", du:"piips.mp3", hhs:"piipst.mp3" } }, { inf:"miauen", stem:"miau", forms:{ ech:"miauen", du:"miaus", hhs:"miaut" }, audio:{ ech:"miauen.mp3", du:"miaus.mp3", hhs:"miaut.mp3" } }, { inf:"jaitzen", stem:"jaitz", forms:{ ech:"jaitzen", du:"jaitz", hhs:"jaitzt" }, audio:{ ech:"jaitzen.mp3", du:"jaitz.mp3", hhs:"jaitzt.mp3" } } ]; VERBS.forEach(v=>{ if(typeof v.forms.du === "string" && v.forms.du.endsWith(".mp3")) v.forms.du = v.forms.du.replace(".mp3",""); if(typeof v.forms.hhs === "string" && v.forms.hhs.endsWith(".mp3")) v.forms.hhs = v.forms.hhs.replace(".mp3",""); }); function track(name, params={}){ if(typeof gtag === "function") gtag("event", name, params); } function shuffle(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; } function uniq(arr){ return [...new Set(arr)]; } function q(id){ return document.getElementById(id); } function clearFeedback(id){ q(id).textContent = ""; q(id).className = "feedback"; } function setFeedback(id, text, ok){ q(id).textContent = text; q(id).className = "feedback " + (ok ? "ok" : "bad"); } function flash(el, ok){ el.classList.remove("flashGreen","flashRed"); void el.offsetWidth; el.classList.add(ok ? "flashGreen" : "flashRed"); } function buildPromptDeck(){ const deck = []; VERBS.forEach(v=>{ PERSONS.forEach(p=>{ deck.push({ verb:v.inf, person:p.key }); }); }); return shuffle(deck); } function getVerb(inf){ return VERBS.find(v=>v.inf===inf); } function formOf(inf, person){ return getVerb(inf).forms[person]; } function audioOf(inf, person){ return AUDIO_BASE + getVerb(inf).audio[person]; } function personLabel(key){ return PERSONS.find(p=>p.key===key).label; } function promptText(inf, person){ return personLabel(person) + " – " + inf; } const audioPlayer = new Audio(); audioPlayer.preload = "auto"; /* ---------- top nav ---------- */ const games = [ { id:"game1", title:"P3 – Fann de Stamm", render:renderGame1 }, { id:"game2", title:"P3 – Stamm + Endung", render:renderGame2 }, { id:"game3", title:"P3 – Lauschter", render:renderGame3 }, { id:"game4", title:"P3 – Richteg Form", render:renderGame4 }, { id:"game5", title:"P3 – Kuck a so", render:renderGame5 }, { id:"game6", title:"P3 – Tabell", render:renderGame6 } ]; let currentGame = 0; function showGame(index){ currentGame = (index + games.length) % games.length; document.querySelectorAll(".game").forEach(g=>g.classList.remove("active")); q(games[currentGame].id).classList.add("active"); q("gameTitle").textContent = games[currentGame].title; games[currentGame].render(); track("p3_verben_game_view", { game: games[currentGame].id }); } q("prev").onclick = ()=> showGame(currentGame - 1); q("next").onclick = ()=> showGame(currentGame + 1); /* ---------- Game 1 ---------- */ let g1Deck = shuffle(VERBS.map(v=>v.inf)); let g1Pos = 0; let g1Selected = []; function renderGame1(){ clearFeedback("g1Fb"); const inf = g1Deck[g1Pos]; const verb = getVerb(inf); q("g1Prog").textContent = (g1Pos + 1) + " / " + g1Deck.length; q("g1Word").textContent = inf; const lettersWrap = q("g1Letters"); lettersWrap.innerHTML = ""; g1Selected = new Array(inf.length).fill(false); inf.split("").forEach((ch, idx)=>{ const btn = document.createElement("button"); btn.className = "letterBtn"; btn.textContent = ch; btn.onclick = ()=>{ g1Selected[idx] = !g1Selected[idx]; btn.classList.toggle("selected", g1Selected[idx]); }; lettersWrap.appendChild(btn); }); } function resetCurrentGame1(){ renderGame1(); } q("g1Replay").onclick = ()=>{ resetCurrentGame1(); track("p3_verben_g1_reset"); }; q("g1Check").onclick = ()=>{ const inf = g1Deck[g1Pos]; const verb = getVerb(inf); const correct = inf.split("").map((_, idx)=> idx < verb.stem.length); const ok = JSON.stringify(g1Selected) === JSON.stringify(correct); flash(q("g1Box"), ok); setFeedback("g1Fb", ok ? "Richteg!" : "Nach net ganz.", ok); track("p3_verben_g1_check", { verb: inf, correct: ok }); if(ok){ setTimeout(()=>{ g1Pos = (g1Pos + 1) % g1Deck.length; renderGame1(); }, 650); } }; /* ---------- Game 2 ---------- */ let g2Deck = buildPromptDeck(); let g2Pos = 0; let g2StemSel = null; let g2EndSel = null; function splitStemEnd(inf, person){ const verb = getVerb(inf); const form = verb.forms[person]; if(form.endsWith("en")) return { stem: form.slice(0,-2), end:"en" }; if(form.endsWith("s")) return { stem: form.slice(0,-1), end:"s" }; if(form.endsWith("t")) return { stem: form.slice(0,-1), end:"t" }; return { stem: form, end:"" }; } function renderGame2(){ clearFeedback("g2Fb"); g2StemSel = null; g2EndSel = null; q("g2Result").textContent = "—"; const item = g2Deck[g2Pos]; const verb = getVerb(item.verb); const parts = splitStemEnd(item.verb, item.person); q("g2Prog").textContent = (g2Pos + 1) + " / " + g2Deck.length; q("g2Prompt").textContent = promptText(item.verb, item.person); const allStems = uniq(shuffle([verb.stem, ...VERBS.map(v=>v.stem)])).slice(0,4); if(!allStems.includes(parts.stem)){ allStems[0] = parts.stem; } const stems = shuffle(uniq(allStems)); const ends = shuffle(uniq([parts.end, "en", "s", "t"])); q("g2Stems").innerHTML = ""; stems.forEach(stem=>{ const btn = document.createElement("button"); btn.className = "tile"; btn.textContent = stem; btn.onclick = ()=>{ g2StemSel = stem; [...q("g2Stems").children].forEach(x=>x.classList.remove("selected")); btn.classList.add("selected"); updateG2Result(); }; q("g2Stems").appendChild(btn); }); q("g2Ends").innerHTML = ""; ends.forEach(end=>{ const btn = document.createElement("button"); btn.className = "tile"; btn.textContent = "-" + end; btn.onclick = ()=>{ g2EndSel = end; [...q("g2Ends").children].forEach(x=>x.classList.remove("selected")); btn.classList.add("selected"); updateG2Result(); }; q("g2Ends").appendChild(btn); }); } function updateG2Result(){ if(g2StemSel === null || g2EndSel === null){ q("g2Result").textContent = "—"; return; } q("g2Result").textContent = g2StemSel + g2EndSel; } q("g2Replay").onclick = ()=>{ g2Deck = buildPromptDeck(); g2Pos = 0; renderGame2(); track("p3_verben_g2_reset"); }; q("g2Check").onclick = ()=>{ if(g2StemSel === null || g2EndSel === null){ setFeedback("g2Fb", "Wiel e Stamm an eng Endung.", false); return; } const item = g2Deck[g2Pos]; const correct = formOf(item.verb, item.person); const attempt = g2StemSel + g2EndSel; const ok = attempt === correct; setFeedback("g2Fb", ok ? "Richteg!" : "Nee. Richteg ass: " + correct, ok); flash(q("g2Result"), ok); track("p3_verben_g2_check", { verb: item.verb, person: item.person, correct: ok }); if(ok){ setTimeout(()=>{ g2Pos = (g2Pos + 1) % g2Deck.length; renderGame2(); }, 650); } }; /* ---------- Game 3 ---------- */ let g3Deck = buildPromptDeck(); let g3Pos = 0; function playCurrentG3(){ const item = g3Deck[g3Pos]; audioPlayer.pause(); audioPlayer.currentTime = 0; audioPlayer.src = audioOf(item.verb, item.person); audioPlayer.play().catch(()=>{}); track("p3_verben_g3_play", { verb: item.verb, person: item.person }); } function renderGame3(){ clearFeedback("g3Fb"); q("g3Prog").textContent = (g3Pos + 1) + " / " + g3Deck.length; q("g3Choices").innerHTML = ""; PERSONS.forEach(p=>{ const btn = document.createElement("button"); btn.className = "choiceBtn"; btn.textContent = p.label; btn.onclick = ()=>{ const item = g3Deck[g3Pos]; const ok = p.key === item.person; flash(q("g3Box"), ok); setFeedback("g3Fb", ok ? "Richteg!" : "Nach eng Kéier.", ok); track("p3_verben_g3_answer", { verb: item.verb, heard: item.person, selected: p.key, correct: ok }); if(ok){ setTimeout(()=>{ g3Pos = (g3Pos + 1) % g3Deck.length; renderGame3(); }, 650); } }; q("g3Choices").appendChild(btn); }); } q("g3Play").onclick = ()=> playCurrentG3(); q("g3Replay").onclick = ()=>{ g3Deck = buildPromptDeck(); g3Pos = 0; renderGame3(); playCurrentG3(); track("p3_verben_g3_reset"); }; /* ---------- Game 4 ---------- */ let g4Deck = buildPromptDeck(); let g4Pos = 0; function renderGame4(){ clearFeedback("g4Fb"); const item = g4Deck[g4Pos]; const verb = getVerb(item.verb); q("g4Prog").textContent = (g4Pos + 1) + " / " + g4Deck.length; q("g4Prompt").textContent = promptText(item.verb, item.person); const correct = verb.forms[item.person]; const wrongs = PERSONS .filter(p=>p.key !== item.person) .map(p=>verb.forms[p.key]); const options = shuffle(uniq([correct, ...wrongs])).slice(0,3); if(!options.includes(correct)){ options[0] = correct; } q("g4Choices").innerHTML = ""; shuffle(options).forEach(opt=>{ const btn = document.createElement("button"); btn.className = "choiceBtn"; btn.textContent = opt; btn.onclick = ()=>{ const ok = opt === correct; flash(q("g4Box"), ok); setFeedback("g4Fb", ok ? "Richteg!" : "Nach eng Kéier.", ok); track("p3_verben_g4_answer", { verb: item.verb, person: item.person, selected: opt, correct: ok }); if(ok){ setTimeout(()=>{ g4Pos = (g4Pos + 1) % g4Deck.length; renderGame4(); }, 650); } }; q("g4Choices").appendChild(btn); }); } q("g4Replay").onclick = ()=>{ g4Deck = buildPromptDeck(); g4Pos = 0; renderGame4(); track("p3_verben_g4_reset"); }; /* ---------- Game 5 ---------- */ let g5Deck = buildPromptDeck(); let g5Pos = 0; function renderGame5(){ q("g5Prog").textContent = (g5Pos + 1) + " / " + g5Deck.length; const item = g5Deck[g5Pos]; q("g5Prompt").textContent = promptText(item.verb, item.person); q("g5Answer").textContent = "—"; } q("g5Show").onclick = ()=>{ const item = g5Deck[g5Pos]; q("g5Answer").textContent = formOf(item.verb, item.person); track("p3_verben_g5_show", { verb: item.verb, person: item.person }); setTimeout(()=>{ g5Pos = (g5Pos + 1) % g5Deck.length; renderGame5(); }, 900); }; q("g5Replay").onclick = ()=>{ g5Deck = buildPromptDeck(); g5Pos = 0; renderGame5(); track("p3_verben_g5_reset"); }; /* ---------- Game 6 ---------- */ let g6Deck = shuffle(VERBS.map(v=>v.inf)); let g6Pos = 0; function renderGame6(){ clearFeedback("g6Fb"); const inf = g6Deck[g6Pos]; const verb = getVerb(inf); q("g6VerbPill").textContent = inf; q("g6Prog").textContent = (g6Pos + 1) + " / " + g6Deck.length; const body = q("g6Body"); body.innerHTML = ""; PERSONS.forEach(person=>{ const tr = document.createElement("tr"); const td1 = document.createElement("td"); td1.className = "rowHead"; td1.textContent = person.label; const td2 = document.createElement("td"); const select = document.createElement("select"); select.className = "tableSelect"; select.dataset.person = person.key; const options = shuffle([ verb.forms.ech, verb.forms.du, verb.forms.hhs ]); options.forEach(opt=>{ const o = document.createElement("option"); o.value = opt; o.textContent = opt; select.appendChild(o); }); td2.appendChild(select); tr.appendChild(td1); tr.appendChild(td2); body.appendChild(tr); }); } q("g6Replay").onclick = ()=>{ g6Deck = shuffle(VERBS.map(v=>v.inf)); g6Pos = 0; renderGame6(); track("p3_verben_g6_reset"); }; q("g6Check").onclick = ()=>{ const inf = g6Deck[g6Pos]; const verb = getVerb(inf); const selects = [...q("g6Body").querySelectorAll("select")]; let correctCount = 0; selects.forEach(sel=>{ const ok = sel.value === verb.forms[sel.dataset.person]; sel.style.borderColor = ok ? "#6BC37E" : "#F08AA0"; if(ok) correctCount++; }); const allOk = correctCount === 3; setFeedback("g6Fb", allOk ? "Alles richteg!" : "Nach net ganz.", allOk); track("p3_verben_g6_check", { verb: inf, correct: allOk }); if(allOk){ setTimeout(()=>{ g6Pos = (g6Pos + 1) % g6Deck.length; renderGame6(); }, 700); } }; showGame(0); </script> </body> </html>
+/* ===================== HELPERS ===================== */
+const audioPlayer = new Audio();
+audioPlayer.preload = "auto";
+
+function q(id){
+  return document.getElementById(id);
+}
+
+function track(name, params = {}){
+  if(typeof gtag === "function"){
+    gtag("event", name, params);
+  }
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function uniq(arr){
+  return [...new Set(arr)];
+}
+
+function clearFeedback(id){
+  q(id).textContent = "";
+  q(id).className = "feedback";
+}
+
+function setFeedback(id, text, ok){
+  q(id).textContent = text;
+  q(id).className = "feedback " + (ok ? "ok" : "bad");
+}
+
+function flash(el, ok){
+  el.classList.remove("flashGreen","flashRed");
+  void el.offsetWidth;
+  el.classList.add(ok ? "flashGreen" : "flashRed");
+}
+
+function getVerb(inf){
+  return VERBS.find(v => v.inf === inf);
+}
+
+function formOf(inf, person){
+  return getVerb(inf).forms[person];
+}
+
+function personLabel(key){
+  return PERSONS.find(p => p.key === key).label;
+}
+
+function promptText(inf, person){
+  return personLabel(person) + " – " + inf;
+}
+
+function buildPromptDeck(){
+  const deck = [];
+  VERBS.forEach(v => {
+    PERSONS.forEach(p => {
+      deck.push({
+        verb:v.inf,
+        person:p.key
+      });
+    });
+  });
+  return shuffle(deck);
+}
+
+function splitStemEnd(inf, person){
+  const form = formOf(inf, person);
+  if(form.endsWith("en")) return { stem:form.slice(0,-2), end:"en" };
+  if(form.endsWith("s"))  return { stem:form.slice(0,-1), end:"s" };
+  if(form.endsWith("t"))  return { stem:form.slice(0,-1), end:"t" };
+  return { stem:form, end:"" };
+}
+
+function showOverlay(text, onClick){
+  q("overlayText").textContent = text;
+  q("overlay").classList.add("show");
+  q("overlayBtn").onclick = () => {
+    q("overlay").classList.remove("show");
+    if(onClick) onClick();
+  };
+}
+
+function playAudioCandidates(files){
+  if(!files || !files.length) return;
+
+  let index = 0;
+
+  function tryNext(){
+    if(index >= files.length) return;
+
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+    audioPlayer.src = AUDIO_BASE + files[index];
+    audioPlayer.onerror = () => {
+      index++;
+      tryNext();
+    };
+    audioPlayer.play().catch(() => {
+      index++;
+      tryNext();
+    });
+  }
+
+  tryNext();
+}
+
+function playVerbForm(inf, person){
+  const files = getVerb(inf).audio[person];
+  playAudioCandidates(files);
+}
+
+/* ===================== GAME NAV ===================== */
+const GAMES = [
+  { id:"game1", title:"P3 – Fann de Stamm", render:renderGame1 },
+  { id:"game2", title:"P3 – Stamm + Endung", render:renderGame2 },
+  { id:"game3", title:"P3 – Lauschter", render:renderGame3 },
+  { id:"game4", title:"P3 – Richteg Form", render:renderGame4 },
+  { id:"game5", title:"P3 – Kuck a so", render:renderGame5 },
+  { id:"game6", title:"P3 – Tabell", render:renderGame6 }
+];
+
+let currentGame = 0;
+
+function showGame(index){
+  currentGame = (index + GAMES.length) % GAMES.length;
+  document.querySelectorAll(".game").forEach(g => g.classList.remove("active"));
+  q(GAMES[currentGame].id).classList.add("active");
+  q("gameTitle").textContent = GAMES[currentGame].title;
+  GAMES[currentGame].render();
+  track("p3_verben_game_view", { game:GAMES[currentGame].id });
+}
+
+q("prev").onclick = () => showGame(currentGame - 1);
+q("next").onclick = () => showGame(currentGame + 1);
+
+/* ===================== GAME 1: FIND STEM ===================== */
+let g1Deck = shuffle(VERBS.map(v => v.inf));
+let g1Pos = 0;
+let g1Selected = [];
+
+function renderGame1(){
+  clearFeedback("g1Fb");
+
+  const inf = g1Deck[g1Pos];
+  const verb = getVerb(inf);
+
+  q("g1Prog").textContent = (g1Pos + 1) + " / " + g1Deck.length;
+  q("g1Word").textContent = inf;
+  q("g1Letters").innerHTML = "";
+
+  g1Selected = new Array(inf.length).fill(false);
+
+  inf.split("").forEach((letter, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "letterBtn";
+    btn.textContent = letter;
+    btn.onclick = () => {
+      g1Selected[idx] = !g1Selected[idx];
+      btn.classList.toggle("selected", g1Selected[idx]);
+    };
+    q("g1Letters").appendChild(btn);
+  });
+
+  q("g1Box").dataset.stem = verb.stem;
+}
+
+q("g1Replay").onclick = () => {
+  renderGame1();
+  track("p3_verben_g1_replay");
+};
+
+q("g1Check").onclick = () => {
+  const inf = g1Deck[g1Pos];
+  const verb = getVerb(inf);
+  const correctPattern = inf.split("").map((_, idx) => idx < verb.stem.length);
+  const ok = JSON.stringify(g1Selected) === JSON.stringify(correctPattern);
+
+  flash(q("g1Box"), ok);
+  setFeedback("g1Fb", ok ? "Richteg!" : "Nach net ganz.", ok);
+  track("p3_verben_g1_check", { verb:inf, correct:ok });
+
+  if(ok){
+    setTimeout(() => {
+      g1Pos++;
+      if(g1Pos >= g1Deck.length){
+        showOverlay("Du hues all d'Stämme fonnt!", () => {
+          g1Deck = shuffle(VERBS.map(v => v.inf));
+          g1Pos = 0;
+          renderGame1();
+        });
+      }else{
+        renderGame1();
+      }
+    }, 650);
+  }
+};
+
+/* ===================== GAME 2: BUILD STEM + ENDING ===================== */
+let g2Deck = buildPromptDeck();
+let g2Pos = 0;
+let g2StemSel = null;
+let g2EndSel = null;
+
+function renderGame2(){
+  clearFeedback("g2Fb");
+  g2StemSel = null;
+  g2EndSel = null;
+  q("g2Result").textContent = "—";
+
+  const item = g2Deck[g2Pos];
+  const verb = getVerb(item.verb);
+  const parts = splitStemEnd(item.verb, item.person);
+
+  q("g2Prog").textContent = (g2Pos + 1) + " / " + g2Deck.length;
+  q("g2Prompt").textContent = promptText(item.verb, item.person);
+
+  let stems = uniq([parts.stem, ...shuffle(VERBS.map(v => v.stem))]).slice(0,4);
+  stems = shuffle(stems);
+
+  let ends = shuffle(uniq([parts.end, "en", "s", "t"]));
+
+  q("g2Stems").innerHTML = "";
+  stems.forEach(stem => {
+    const btn = document.createElement("button");
+    btn.className = "tile";
+    btn.textContent = stem;
+    btn.onclick = () => {
+      g2StemSel = stem;
+      [...q("g2Stems").children].forEach(x => x.classList.remove("selected"));
+      btn.classList.add("selected");
+      updateG2Result();
+    };
+    q("g2Stems").appendChild(btn);
+  });
+
+  q("g2Ends").innerHTML = "";
+  ends.forEach(end => {
+    const btn = document.createElement("button");
+    btn.className = "tile";
+    btn.textContent = "-" + end;
+    btn.onclick = () => {
+      g2EndSel = end;
+      [...q("g2Ends").children].forEach(x => x.classList.remove("selected"));
+      btn.classList.add("selected");
+      updateG2Result();
+    };
+    q("g2Ends").appendChild(btn);
+  });
+}
+
+function updateG2Result(){
+  if(g2StemSel === null || g2EndSel === null){
+    q("g2Result").textContent = "—";
+    return;
+  }
+  q("g2Result").textContent = g2StemSel + g2EndSel;
+}
+
+q("g2Replay").onclick = () => {
+  g2Deck = buildPromptDeck();
+  g2Pos = 0;
+  renderGame2();
+  track("p3_verben_g2_replay");
+};
+
+q("g2Check").onclick = () => {
+  if(g2StemSel === null || g2EndSel === null){
+    setFeedback("g2Fb", "Wiel e Stamm an eng Endung.", false);
+    return;
+  }
+
+  const item = g2Deck[g2Pos];
+  const correct = formOf(item.verb, item.person);
+  const attempt = g2StemSel + g2EndSel;
+  const ok = attempt === correct;
+
+  flash(q("g2Result"), ok);
+  setFeedback("g2Fb", ok ? "Richteg!" : "Nee. Richteg ass: " + correct, ok);
+  track("p3_verben_g2_check", {
+    verb:item.verb,
+    person:item.person,
+    correct:ok
+  });
+
+  if(ok){
+    setTimeout(() => {
+      g2Pos++;
+      if(g2Pos >= g2Deck.length){
+        showOverlay("Du hues all d'Forme gebaut!", () => {
+          g2Deck = buildPromptDeck();
+          g2Pos = 0;
+          renderGame2();
+        });
+      }else{
+        renderGame2();
+      }
+    }, 650);
+  }
+};
+
+/* ===================== GAME 3: LISTEN + CHOOSE PRONOUN ===================== */
+let g3Deck = buildPromptDeck();
+let g3Pos = 0;
+
+function renderGame3(){
+  clearFeedback("g3Fb");
+  q("g3Prog").textContent = (g3Pos + 1) + " / " + g3Deck.length;
+  q("g3Choices").innerHTML = "";
+
+  PERSONS.forEach(p => {
+    const btn = document.createElement("button");
+    btn.className = "choiceBtn";
+    btn.textContent = p.label;
+    btn.onclick = () => {
+      const item = g3Deck[g3Pos];
+      const ok = p.key === item.person;
+
+      flash(q("g3Box"), ok);
+      setFeedback("g3Fb", ok ? "Richteg!" : "Nach eng Kéier.", ok);
+      track("p3_verben_g3_answer", {
+        verb:item.verb,
+        expected:item.person,
+        selected:p.key,
+        correct:ok
+      });
+
+      if(ok){
+        setTimeout(() => {
+          g3Pos++;
+          if(g3Pos >= g3Deck.length){
+            showOverlay("Du hues all d'Pronome richteg gewielt!", () => {
+              g3Deck = buildPromptDeck();
+              g3Pos = 0;
+              renderGame3();
+            });
+          }else{
+            renderGame3();
+          }
+        }, 650);
+      }
+    };
+    q("g3Choices").appendChild(btn);
+  });
+}
+
+q("g3Play").onclick = () => {
+  const item = g3Deck[g3Pos];
+  playVerbForm(item.verb, item.person);
+  track("p3_verben_g3_play", {
+    verb:item.verb,
+    person:item.person
+  });
+};
+
+q("g3Replay").onclick = () => {
+  g3Deck = buildPromptDeck();
+  g3Pos = 0;
+  renderGame3();
+  playVerbForm(g3Deck[g3Pos].verb, g3Deck[g3Pos].person);
+  track("p3_verben_g3_replay");
+};
+
+/* ===================== GAME 4: CHOOSE CORRECT FORM ===================== */
+let g4Deck = buildPromptDeck();
+let g4Pos = 0;
+
+function renderGame4(){
+  clearFeedback("g4Fb");
+
+  const item = g4Deck[g4Pos];
+  const verb = getVerb(item.verb);
+  const correct = verb.forms[item.person];
+
+  q("g4Prog").textContent = (g4Pos + 1) + " / " + g4Deck.length;
+  q("g4Prompt").textContent = promptText(item.verb, item.person);
+
+  let options = uniq([
+    verb.forms.ech,
+    verb.forms.du,
+    verb.forms.hhs
+  ]);
+
+  options = shuffle(options);
+
+  q("g4Choices").innerHTML = "";
+
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "choiceBtn";
+    btn.textContent = opt;
+    btn.onclick = () => {
+      const ok = opt === correct;
+
+      flash(q("g4Box"), ok);
+      setFeedback("g4Fb", ok ? "Richteg!" : "Nach eng Kéier.", ok);
+      track("p3_verben_g4_answer", {
+        verb:item.verb,
+        person:item.person,
+        selected:opt,
+        correct:ok
+      });
+
+      if(ok){
+        setTimeout(() => {
+          g4Pos++;
+          if(g4Pos >= g4Deck.length){
+            showOverlay("Du hues all déi richteg Forme fonnt!", () => {
+              g4Deck = buildPromptDeck();
+              g4Pos = 0;
+              renderGame4();
+            });
+          }else{
+            renderGame4();
+          }
+        }, 650);
+      }
+    };
+    q("g4Choices").appendChild(btn);
+  });
+}
+
+q("g4Replay").onclick = () => {
+  g4Deck = buildPromptDeck();
+  g4Pos = 0;
+  renderGame4();
+  track("p3_verben_g4_replay");
+};
+
+/* ===================== GAME 5: LOOK + SAY ===================== */
+let g5Deck = buildPromptDeck();
+let g5Pos = 0;
+
+function renderGame5(){
+  q("g5Prog").textContent = (g5Pos + 1) + " / " + g5Deck.length;
+  q("g5Prompt").textContent = promptText(g5Deck[g5Pos].verb, g5Deck[g5Pos].person);
+  q("g5Answer").textContent = "—";
+}
+
+q("g5Play").onclick = () => {
+  const item = g5Deck[g5Pos];
+  playVerbForm(item.verb, item.person);
+  track("p3_verben_g5_play", {
+    verb:item.verb,
+    person:item.person
+  });
+};
+
+q("g5Show").onclick = () => {
+  const item = g5Deck[g5Pos];
+  q("g5Answer").textContent = formOf(item.verb, item.person);
+
+  track("p3_verben_g5_show", {
+    verb:item.verb,
+    person:item.person
+  });
+
+  setTimeout(() => {
+    g5Pos++;
+    if(g5Pos >= g5Deck.length){
+      showOverlay("Du hues all d'Äntwerte gekuckt!", () => {
+        g5Deck = buildPromptDeck();
+        g5Pos = 0;
+        renderGame5();
+      });
+    }else{
+      renderGame5();
+    }
+  }, 900);
+};
+
+q("g5Replay").onclick = () => {
+  g5Deck = buildPromptDeck();
+  g5Pos = 0;
+  renderGame5();
+  track("p3_verben_g5_replay");
+};
+
+/* ===================== GAME 6: FILL TABLE ===================== */
+let g6Deck = shuffle(VERBS.map(v => v.inf));
+let g6Pos = 0;
+
+function renderGame6(){
+  clearFeedback("g6Fb");
+
+  const inf = g6Deck[g6Pos];
+  const verb = getVerb(inf);
+
+  q("g6VerbPill").textContent = inf;
+  q("g6Prog").textContent = (g6Pos + 1) + " / " + g6Deck.length;
+  q("g6Body").innerHTML = "";
+
+  PERSONS.forEach(person => {
+    const tr = document.createElement("tr");
+
+    const td1 = document.createElement("td");
+    td1.className = "rowHead";
+    td1.textContent = person.label;
+
+    const td2 = document.createElement("td");
+    const sel = document.createElement("select");
+    sel.className = "tableSelect";
+    sel.dataset.person = person.key;
+
+    shuffle([
+      verb.forms.ech,
+      verb.forms.du,
+      verb.forms.hhs
+    ]).forEach(opt => {
+      const option = document.createElement("option");
+      option.value = opt;
+      option.textContent = opt;
+      sel.appendChild(option);
+    });
+
+    td2.appendChild(sel);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    q("g6Body").appendChild(tr);
+  });
+}
+
+q("g6Replay").onclick = () => {
+  g6Deck = shuffle(VERBS.map(v => v.inf));
+  g6Pos = 0;
+  renderGame6();
+  track("p3_verben_g6_replay");
+};
+
+q("g6Check").onclick = () => {
+  const inf = g6Deck[g6Pos];
+  const verb = getVerb(inf);
+  const selects = [...q("g6Body").querySelectorAll("select")];
+
+  let correctCount = 0;
+
+  selects.forEach(sel => {
+    const ok = sel.value === verb.forms[sel.dataset.person];
+    sel.style.borderColor = ok ? "#69C07C" : "#EA7B95";
+    if(ok) correctCount++;
+  });
+
+  const allOk = correctCount === PERSONS.length;
+
+  setFeedback("g6Fb", allOk ? "Alles richteg!" : "Nach net ganz.", allOk);
+  track("p3_verben_g6_check", {
+    verb:inf,
+    correct:allOk
+  });
+
+  if(allOk){
+    setTimeout(() => {
+      g6Pos++;
+      if(g6Pos >= g6Deck.length){
+        showOverlay("Du hues all d'Tabellen fäerdeg gemaach!", () => {
+          g6Deck = shuffle(VERBS.map(v => v.inf));
+          g6Pos = 0;
+          renderGame6();
+        });
+      }else{
+        renderGame6();
+      }
+    }, 700);
+  }
+};
+
+/* ===================== INIT ===================== */
+showGame(0);
+</script>
+
+</body>
+</html>
